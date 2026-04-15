@@ -1,20 +1,20 @@
 %% processing.mlx
-% Created by   : Thamilezai Ananthakumar
+% Created by   : 
 % Date Created : 2025-12-26
 % Last Modified: 2026-01-14
 % Version      : v2.0
 %
 % Description:
-% Two neuro muscular signal channels are processed using a band-pass filter to remove motion artifacts and unwanted noise, while the audio signal is kept unfiltered to preserve its original characteristics.
-% The neuro muscular signal and audio recordings are temporally synchronized by calculating the time difference between the start of the audio file and the EMG acquisition, allowing both signals to be aligned on a common time axis. 
-% After synchronization, the neuro muscular signal and audio signals are segmented into word-level windows based on predefined time intervals. 
-% For each word segment, a structured MATLAB dataset is created that contains the audio waveform and its spectrogram, along with the neuro muscular signal waveforms, neuro muscular signal frequency-domain representation using FFT, neuro muscular signal spectrogram, and neuro muscular signal continuous wavelet transform, enabling comprehensive time–frequency and time–scale analysis for each word.
+% Two sEMG signal channels are processed using a band-pass filter to remove motion artifacts and unwanted noise, while the audio signal is kept unfiltered to preserve its original characteristics.
+% The sEMG signal and audio recordings are temporally synchronized by calculating the time difference between the start of the audio file and the EMG acquisition, allowing both signals to be aligned on a common time axis. 
+% After synchronization, the sEMG  signal and audio signals are segmented into word-level windows based on predefined time intervals. 
+% For each word segment, a structured MATLAB dataset is created that contains the audio waveform and its spectrogram, along with the sEMG  signal waveforms, muscular signal frequency-domain representation using FFT, sEMG signal spectrogram, and sEMG  signal continuous wavelet transform, enabling comprehensive time–frequency and time–scale analysis for each word.
 
 %%
 clc;
 close all;
 %%
-folder_path = "F:\JHU\Audio-project\New folder\4_04" 
+folder_path = "F:\Audio-project\New folder\4_04" 
 %%
 [numChannels, data, time, sampleRate, unpackedFile, fileList, timestamp] = loadFiles(folder_path)
 %%
