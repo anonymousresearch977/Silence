@@ -1,5 +1,5 @@
 function T = addVowelsMultiHot(T)
-    % Add multi-hot encoding columns for vowels (NO NONE)
+    % Add multi-hot encoding columns for vowel /a/ (NO NONE)
     n = height(T);
     T.isA = false(n, 1);
 
