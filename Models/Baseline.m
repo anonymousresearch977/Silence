@@ -10,7 +10,7 @@ FREQ_MAX = 450;
 SAMPLE_RATE = 12500;
 %% LOAD DATA
 
-fprintf('=== Loading Data ===\n');
+fprintf(' Loading Data \n');
 tic;
 
 trainData = load('trainv2.mat');
@@ -26,7 +26,7 @@ fprintf('  Train: %d rows\n', height(FinalTableTrain));
 fprintf('  Test: %d rows\n\n', height(FinalTableTest));
 %% PROCESS LABELS
 
-fprintf('=== Processing Labels ===\n');
+fprintf(' Processing Labels \n');
 
 v = upper(strtrim(FinalTableTrain.Vowels));
 v(v == "" | v == "N" | v == "NONE") = "";
@@ -51,7 +51,7 @@ fprintf('  Present (1): %d (%.1f%%)\n', sum(Ytest_A==1), 100*sum(Ytest_A==1)/len
 fprintf('  Absent  (0): %d (%.1f%%)\n\n', sum(Ytest_A==0), 100*sum(Ytest_A==0)/length(Ytest_A));
 %% EXTRACT TRAINING FEATURES
 
-fprintf('=== Extracting Training Features ===\n');
+fprintf(' Extracting Training Features \n');
 fprintf('This will take several minutes...\n\n');
 
 N = height(FinalTableTrain);
@@ -76,7 +76,7 @@ fprintf('  Feature vector length: %d\n\n', length(Xtrain_cell{1}));
 clear FinalTableTrain
 %% EXTRACT TEST FEATURES
 
-fprintf('=== Extracting Test Features ===\n');
+fprintf(' Extracting Test Features \n');
 
 M = height(FinalTableTest);
 Xtest_cell = cell(M, 1);
@@ -97,7 +97,7 @@ fprintf('\n Test features ready (%.1f min)\n\n', toc/60);
 clear FinalTableTest
 %% TRAIN/VALIDATION SPLIT
 
-fprintf('=== Creating Train/Val Split ===\n');
+fprintf(' Creating Train/Val Split \n');
 
 valRatio   = 0.2;
 numSamples = length(Ytrain_A);
@@ -122,7 +122,7 @@ fprintf('  Absent (0):  %d\n', original_counts(1));
 fprintf('  Present (1): %d\n\n', original_counts(2));
 %% DATA AUGMENTATION
 
-fprintf('=== Augmenting Training Data ===\n');
+fprintf(' Augmenting Training Data \n');
 
 idx0 = find(Ytrain == 0);
 idx1 = find(Ytrain == 1);
@@ -170,7 +170,7 @@ fprintf('  Present (1): %d (%.1f%%)\n\n', balanced_counts(2), 100*balanced_count
 clear Xtrain augmented_features Xtrain_cell
 %% DATA NORMALIZATION (Standard Scaler)
 
-fprintf('=== Normalizing Features ===\n');
+fprintf(' Normalizing Features \n');
 
 % Convert cell arrays to matrices (samples × features)
 XtrainMat = double(cell2mat(XtrainFinal')');   % [N_train × D]
@@ -189,7 +189,7 @@ fprintf('  Normalized %d features.\n\n', size(XtrainMat, 2));
 clear XtrainFinal Xval Xtest_cell
 %% TRAIN LOGISTIC REGRESSION MODEL
 
-fprintf('=== Training Logistic Regression ===\n');
+fprintf(' Training Logistic Regression \n');
 
 YtrainFinal_cat = categorical(YtrainFinal_numeric, [0,1], {'Absent','Present'});
 Yval_cat        = categorical(Yval,                [0,1], {'Absent','Present'});
@@ -207,15 +207,15 @@ trainTime = toc;
 fprintf('\n Training done in %.1f minutes\n\n', trainTime/60);  
 %% EVALUATE ALL SETS
 
-fprintf('=== Evaluating Training Set ===\n');
+fprintf(' Evaluating Training Set \n');
 [YPred_train, scores_train] = predict(model_LR, XtrainMat);
 printMetrics(YtrainFinal_cat, YPred_train, 'Training');
 
-fprintf('=== Evaluating Validation Set ===\n');
+fprintf(' Evaluating Validation Set \n');
 [YPred_val, scores_val] = predict(model_LR, XvalMat);
 printMetrics(Yval_cat, YPred_val, 'Validation');
 
-fprintf('=== Evaluating Test Set ===\n');
+fprintf(' Evaluating Test Set \n');
 [YPred_test, scores_test] = predict(model_LR, XtestMat);
 printMetrics(Ytest_cat, YPred_test, 'Test');
 %% COMPARATIVE SUMMARY
@@ -251,7 +251,7 @@ fprintf('║  F1-Score    │   %6.2f%%   │   %6.2f%%   │  %6.2f%%   │  %.
 fprintf('╚═══════════════════════════════════════════════════════════════════╝\n\n');
 %% VISUALIZATIONS
 
-fprintf('=== Creating Visualizations ===\n');
+fprintf(' Creating Visualizations \n');
 
 % Confusion Matrices
 figure('Position', [50 50 1500 500], 'Name', 'Confusion Matrices');
@@ -271,7 +271,7 @@ title('After Augmentation'); ylabel('Count');
 b2.FaceColor = 'flat'; b2.CData(1,:) = [0.8 0.3 0.3]; b2.CData(2,:) = [0.3 0.8 0.3];
 %% ROC & AUC
 
-fprintf('=== Calculating ROC and AUC ===\n');
+fprintf(' Calculating ROC and AUC \n');
 
 % scores column 2 = P(Present)
 [Xroc_tr, Yroc_tr, ~, AUC_tr] = perfcurve(YtrainFinal_cat, scores_train(:,2), 'Present');
@@ -299,7 +299,7 @@ grid on; axis square; hold off;
 fprintf('╔════════════════════════════════════════════╗\n');
 fprintf('║  TRAINING COMPLETE (Logistic Regression)   ║\n');
 fprintf('╠════════════════════════════════════════════╣\n');
-fprintf('║  Total time: %.1f minutes                   ║\n', trainTime/60);
+fprintf('║  Total time: %.1f minutes                  ║\n', trainTime/60);
 fprintf('║  Test accuracy: %.2f%%                     ║\n', acc_te*100);
 fprintf('║  Test F1-Score: %.2f%%                     ║\n', F1_te*100);
 fprintf('╚════════════════════════════════════════════╝\n');
