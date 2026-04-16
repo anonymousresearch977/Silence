@@ -5,7 +5,7 @@ function plotAudioEMGFromDataset_SeparateFigures(Dataset, wordIdx, channelList)
 % with frequency-axis limits applied.
 %
 % EMG freq range   : 0–5 Hz
-% Audio freq range : 0–800 Hz
+
 
     if wordIdx < 1 || wordIdx > numel(Dataset)
         error('Invalid word index');
