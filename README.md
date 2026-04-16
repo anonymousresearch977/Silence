@@ -10,10 +10,10 @@ processed for sequential modeling with a BiLSTM network.
 
 ## Dataset
 The dataset is organized as follows:
-- **Training Data**: `train.mat` contains sEMG signals, spectrogram 
+- **Training Data**: `trainv2.mat` contains sEMG signals, spectrogram 
   features, word labels, and binary target labels indicating the 
   presence of the vowel /a/.
-- **Test Data**: `test.mat` contains sEMG signals and labels for 
+- **Test Data**: `testv2.mat` contains sEMG signals and labels for 
   evaluation on unseen words.
 
 The training and test sets have no overlapping words to ensure 
@@ -24,8 +24,8 @@ robust open-vocabulary evaluation.
 |------|------------|
 | `BiLSTM_v2.mlx` | Train BiLSTM and evaluate on independent test set |
 | `K_Fold.mlx` | Perform 5-fold cross-validation |
-| `train.mat` | Training dataset (signals, spectrograms, word labels) |
-| `test.mat` | Independent test dataset |
+| `trainv2.mat` | Training dataset (signals, spectrograms, word labels) |
+| `testv2.mat` | Independent test dataset |
 | `addaddVowelsMultiHot.m` | Utility function for vowel multi-hot encoding |
 
 ---
@@ -47,8 +47,8 @@ Update the dataset loading lines in both `BiLSTM_v2.mlx` and
 `K_Fold.mlx` as shown below:
 
 ```matlab
-trainData = load('train.mat'); 
-testData  = load('test.mat');
+trainData = load('trainv2.mat'); 
+testData  = load('tesv2t.mat');
 ```
 
 ---
