@@ -1,7 +1,7 @@
 %% processing.mlx
 
 % Description:
-% Two sEMG signal channels are processed using a band-pass filter to remove motion artifacts and unwanted noise, while the audio signal is kept unfiltered to preserve its original characteristics.
+% Two sEMG signal channels are processed using a low-pass filter to remove baseline noise, while the audio signal is kept unfiltered to preserve its original characteristics.
 % The sEMG signal and audio recordings are temporally synchronized by calculating the time difference between the start of the audio file and the EMG acquisition, allowing both signals to be aligned on a common time axis. 
 % After synchronization, the sEMG  signal and audio signals are segmented into word-level windows based on predefined time intervals. 
 % For each word segment, a structured MATLAB dataset is created that contains the audio waveform and its spectrogram, along with the sEMG  signal waveforms, muscular signal frequency-domain representation using FFT, sEMG signal spectrogram, and sEMG  signal continuous wavelet transform, enabling comprehensive time–frequency and time–scale analysis for each word.
@@ -33,9 +33,8 @@ end
 sampleRate 
 %%
 low_cutoff = 0.1;
-high_cutoff = 1000; 
 %%
-[filteredSignal] = FilteredSignals(fileList, data, numChannels, sampleRate, low_cutoff, high_cutoff) % filtering emg signal
+[filteredSignal] = FilteredSignals(fileList, data, numChannels, sampleRate, low_cutoff) % filtering emg signal
 %%
 windowlength = 30;
 %%
