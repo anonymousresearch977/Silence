@@ -1,7 +1,7 @@
 clc; clear; close all;
 %%
 %% PATH 
-folder_path = "F:\JHU\Audio-project\testv2" 
+folder_path = "F:\Audio-project\testv2" 
 fileList = dir(fullfile(folder_path,'*.mat'));
 %%
 fprintf('Total MAT files found: %d\n', numel(fileList));
@@ -50,7 +50,7 @@ for f = 1:numel(fileList)
         row.word = string(wordStr);
 
         %%  SPLIT LETTERS (CRITICAL FIX) 
-        letters = cellstr(lower(wordStr)');   % {'c','a','r'}
+        letters = cellstr(lower(wordStr)');   
 
         %% EMG FEATURES 
         numCh = 2;   % fixed channels
