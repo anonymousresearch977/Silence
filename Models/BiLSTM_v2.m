@@ -7,7 +7,7 @@ FREQ_MIN = 0.1;
 FREQ_MAX = 450;
 SAMPLE_RATE = 12500;
 %% LOAD DATA
-fprintf('=== Loading Data ===\n');
+fprintf(' Loading Data \n');
 tic;
 
 trainData = load('trainv2.mat');
@@ -22,7 +22,7 @@ fprintf(' Loaded in %.1f sec\n', toc);
 fprintf('  Train: %d rows\n', height(FinalTableTrain));
 fprintf('  Test: %d rows\n\n', height(FinalTableTest));
 %% PROCESS LABELS
-fprintf('=== Processing Labels ===\n');
+fprintf(' Processing Labels \n');
 
 % Normalize training labels
 v = upper(strtrim(FinalTableTrain.Vowels));
@@ -50,7 +50,7 @@ fprintf('\nTest distribution:\n');
 fprintf('  Present (1): %d (%.1f%%)\n', sum(Ytest_A==1), 100*sum(Ytest_A==1)/length(Ytest_A));
 fprintf('  Absent (0):  %d (%.1f%%)\n\n', sum(Ytest_A==0), 100*sum(Ytest_A==0)/length(Ytest_A));
 %% EXTRACT TRAINING FEATURES
-fprintf('=== Extracting Training Features ===\n');
+fprintf(' Extracting Training Features \n');
 fprintf('This will take several minutes...\n\n');
 
 N = height(FinalTableTrain);
@@ -78,7 +78,7 @@ fprintf('  Feature shape: %d features × %d timesteps\n\n', numFeatures, seqLeng
 
 clear FinalTableTrain
 %% EXTRACT TEST FEATURES
-fprintf('=== Extracting Test Features ===\n');
+fprintf(' Extracting Test Features \n');
 
 M = height(FinalTableTest);
 Xtest_cell = cell(M, 1);
@@ -100,7 +100,7 @@ fprintf('\n Test features ready (%.1f min)\n\n', toc/60);
 
 clear FinalTableTest
 %% TRAIN/VALIDATION SPLIT
-fprintf('=== Creating Train/Val Split ===\n');
+fprintf(' Creating Train/Val Split \n');
 
 valRatio = 0.2;
 numSamples = length(Ytrain_A);
@@ -132,7 +132,7 @@ fprintf('Training set distribution (before augmentation):\n');
 fprintf('  Absent (0):  %d\n', original_counts(1));
 fprintf('  Present (1): %d\n\n', original_counts(2));
 %%  DATA AUGMENTATION
-fprintf('=== Augmenting Training Data ===\n');
+fprintf(' Augmenting Training Data \n');
 
 idx0 = find(Ytrain == 0);  % Absent
 idx1 = find(Ytrain == 1);  % Present
@@ -192,7 +192,7 @@ fprintf('  Present (1): %d (%.1f%%)\n\n', balanced_counts(2), 100*balanced_count
 
 clear Xtrain augmented_features Xtrain_cell
 %% DATA NORMALIZATION (Standard Scaler)
-fprintf('=== Normalizing Features (Standard Scaler) ===\n');
+fprintf(' Normalizing Features (Standard Scaler) \n');
 
 %  Concatenate all training samples to calculate global stats
 allTrainData = horzcat(XtrainFinal{:}); 
@@ -222,7 +222,7 @@ fprintf('  Normalization complete.\n\n');
 
 clear allTrainData % Free up memory
 %% BUILD LSTM MODEL
-fprintf('=== Building LSTM Architecture ===\n');
+fprintf('Building LSTM Architecture \n');
 
 layers = [
     sequenceInputLayer(numFeatures, 'Name', 'input')
@@ -231,21 +231,13 @@ layers = [
     batchNormalizationLayer('Name', 'bn1')
     dropoutLayer(0.5, 'Name', 'dropout1')
     
-    %bilstmLayer(20, 'OutputMode', 'last', 'Name', 'bilstm2')
-    %batchNormalizationLayer('Name', 'bn2')
-    %dropoutLayer(0.3, 'Name', 'dropout2')
-    
-    %fullyConnectedLayer(16, 'Name', 'fc1')
-    %leakyReluLayer(0.2, 'Name', 'leaky_relu1')
-    %dropoutLayer(0.4, 'Name', 'dropout3')
-    
     fullyConnectedLayer(2, 'Name', 'fc_out')
     softmaxLayer('Name', 'softmax')
     classificationLayer('Name', 'output')
 ];
 
 %% TRAINING CONFIGURATION
-fprintf('=== Training Configuration ===\n');
+fprintf(' Training Configuration \n');
 options = trainingOptions('adam', ...
     'InitialLearnRate', 1e-4, ...
     'MaxEpochs', 30, ...
@@ -277,7 +269,7 @@ trainTime = toc;
 fprintf('\n');
 fprintf(' Time: %.1f minutes \n', trainTime/60);
 %% EVALUATE TRAINING SET
-fprintf('=== Evaluating Training Set ===\n');
+fprintf(' Evaluating Training Set \n');
 
 YPred_train = classify(net_A, XtrainFinal);
 
@@ -303,7 +295,7 @@ fprintf('\nConfusion Matrix:\n');
 fprintf('  TN=%d  FP=%d\n', TN_train, FP_train);
 fprintf('  FN=%d  TP=%d\n\n', FN_train, TP_train);
 %% EVALUATE VALIDATION SET
-fprintf('=== Evaluating Validation Set ===\n');
+fprintf(' Evaluating Validation Set \n');
 
 YPred_val = classify(net_A, Xval);
 
@@ -330,7 +322,7 @@ fprintf('\nConfusion Matrix:\n');
 fprintf('  TN=%d  FP=%d\n', TN_val, FP_val);
 fprintf('  FN=%d  TP=%d\n\n', FN_val, TP_val);
 %% EVALUATE TEST SET 
-fprintf('=== Evaluating Test Set ===\n');
+fprintf(' Evaluating Test Set \n');
 
 Ytest_cat = categorical(Ytest_A, [0, 1], {'Absent', 'Present'});
 YPred_test = classify(net_A, Xtest_cell);
@@ -374,7 +366,7 @@ fprintf('║  F1-Score    │   %6.2f%%   │   %6.2f%%   │  %6.2f%%   │  %.
     F1_train*100, F1_val*100, F1_test*100, (F1_train-F1_test)*100);
 fprintf('╚═══════════════════════════════════════════════════════════════════╝\n\n');
 %% VISUALIZATIONS
-fprintf('=== Creating Visualizations ===\n');
+fprintf(' Creating Visualizations \n');
 
 %  CONFUSION MATRICES
 figure('Position', [50 50 1500 500], 'Name', 'Confusion Matrices');
@@ -418,7 +410,7 @@ b2.CData(2,:) = [0.3 0.8 0.3];
 
 fprintf(' Distribution charts created\n\n');
 %% ROC & AUC CALCULATION AND PLOTTING
-fprintf('=== Calculating ROC and AUC ===\n');
+fprintf('Calculating ROC and AUC \n');
 
 % GET PROBABILITY SCORES
 % We need the second column of 'scores' which corresponds to the "Present" class
@@ -471,7 +463,7 @@ hold off;
 fprintf(' ROC Curves plotted successfully.\n\n');
 %% 
 %% EMPIRICAL CHANCE-LEVEL AUC (Permutation Test)
-fprintf('=== Computing Empirical Chance-Level AUC ===\n');
+fprintf(' Computing Empirical Chance-Level AUC \n');
 
 numPermutations = 1000;
 permAUC_test = zeros(numPermutations, 1);
