@@ -37,7 +37,7 @@ fprintf('Label distribution:\n');
 fprintf('  Present (1): %d (%.1f%%)\n', sum(Ytrain_A==1), 100*sum(Ytrain_A==1)/length(Ytrain_A));
 fprintf('  Absent (0):  %d (%.1f%%)\n\n', sum(Ytrain_A==0), 100*sum(Ytrain_A==0)/length(Ytrain_A));
 %% FILTER WORDS TO EXACTLY 5 REPETITIONS PER WORD
-fprintf('=== Filtering to 5 Repetitions per Word ===\n');
+fprintf(' Filtering to 5 Repetitions per Word  \n');
 
 % Check if 'Word' column exists
 if ~ismember('word', FinalTableTrain.Properties.VariableNames)
@@ -95,7 +95,7 @@ for i = 1:N
 end
 
 totalTime = toc;
-fprintf('\n✓ Feature extraction complete (%.1f min)\n', totalTime/60);
+fprintf('\n Feature extraction complete (%.1f min)\n', totalTime/60);
 
 [numFeatures, seqLength] = size(X_all{1});
 fprintf('  Feature shape: %d features × %d timesteps\n\n', numFeatures, seqLength);
