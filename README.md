@@ -31,13 +31,13 @@ robust open-vocabulary evaluation.
 ---
 
 ## Dataset Structure
-### `train.mat` contains:
+### `trainv2.mat` contains:
 - Dual-channel sEMG signals
 - Spectrogram features
 - Time-domain signals
 - Word labels
 
-### `test.mat` contains:
+### `testv2.mat` contains:
 - sEMG signals and labels for evaluation on unseen words
 
 To ensure smooth execution, place **all files** (scripts, functions, 
