@@ -1,6 +1,6 @@
-function [filteredSignal] = FilteredSignals(fileList, data, numChannels, sampleRate, low_cutoff, high_cutoff)
+function [filteredSignal] = FilteredSignals(fileList, data, numChannels, sampleRate, low_cutoff)
 %FilteredSignals
-%  Applies a band-pass Butterworth filter for each channel.
+%  Applies a high-pass Butterworth filter for each channel.
 %
 % Inputs:
 %   fileList     - struct from dir with file names
@@ -8,7 +8,7 @@ function [filteredSignal] = FilteredSignals(fileList, data, numChannels, sampleR
 %   numChannels  - cell array with number of channels
 %   sampleRate   - cell array of sampling rates
 %   low_cutoff   - lower cutoff frequency in Hz 
-%   high_cutoff  - upper cutoff frequency in Hz 
+ 
 %
 % Outputs:
 %   filteredSignal - cell array containing filtered signals
@@ -20,10 +20,10 @@ function [filteredSignal] = FilteredSignals(fileList, data, numChannels, sampleR
         fs = sampleRate{file};  % Sampling rate for this file
 
         % Normalized cutoff for Nyquist frequency
-        Wn = [low_cutoff high_cutoff] / (fs/2);
+        Wn = [low_cutoff ] / (fs/2);
 
         % Design 2nd-order Butterworth band-pass filter
-        [b, a] = butter(2, Wn, 'bandpass');
+        [b, a] = butter(2, Wn, 'low');
 
         for ch = 1:numChannels{file}
             % Apply zero-phase filtering
