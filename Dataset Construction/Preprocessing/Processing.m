@@ -1,9 +1,5 @@
 %% processing.mlx
-% Created by   : 
-% Date Created : 2025-12-26
-% Last Modified: 2026-01-14
-% Version      : v2.0
-%
+
 % Description:
 % Two sEMG signal channels are processed using a band-pass filter to remove motion artifacts and unwanted noise, while the audio signal is kept unfiltered to preserve its original characteristics.
 % The sEMG signal and audio recordings are temporally synchronized by calculating the time difference between the start of the audio file and the EMG acquisition, allowing both signals to be aligned on a common time axis. 
