@@ -30,18 +30,18 @@ function [data, sampleRate, time, fileList, recTimeAll] = loadFilesAudio(folderP
         filePath = fullfile(folderPath, fileList(i).name);
         fprintf('Processing file %d of %d: %s\n', i, numFiles, fileList(i).name);
 
-        % 1. Get recording start time
+        % Get recording start time
         recTime = getM4ARecordingTime_(filePath);
         recTimeAll{i} = recTime;
 
-        % 2. Read audio
+        % Read audio
         [audioData, fs] = audioread(filePath);
 
-        % 3. Store outputs
+        % Store outputs
         data{i} = audioData;
         sampleRate{i} = fs;
 
-        % 4. Time vector in seconds (starting from 0)
+        % Time vector in seconds (starting from 0)
         nSamples = length(audioData);
         time{i} = (0:nSamples-1)/fs;
     end
