@@ -1,10 +1,9 @@
-%% INITIAL SETUP AND DATA LOADING
 clc; clear; close all;
 %%
 rng(42, 'twister');
-fprintf('========================================\n');
+
 fprintf('K-FOLD CROSS-VALIDATION FOR VOWEL A\n');
-fprintf('========================================\n\n');
+
 %%
 % Configuration
 FREQ_MIN = 0.1;
@@ -13,7 +12,7 @@ SAMPLE_RATE = 12500;
 K_FOLDS = 5;  % Number of folds
 %%
 % Load training data only
-fprintf('=== Loading Training Data ===\n');
+fprintf(' Loading Training Data \n');
 tic;
 trainData = load('trainv2.mat');
 FinalTableTrain = trainData.FinalTable;
@@ -21,7 +20,7 @@ clear trainData;
 fprintf(' Loaded in %.1f sec\n', toc);
 fprintf('  Total rows: %d\n\n', height(FinalTableTrain));
 %% PROCESS LABELS
-fprintf('=== Processing Labels ===\n');
+fprintf(' Processing Labels \n');
 
 % Normalize labels
 v = upper(strtrim(FinalTableTrain.Vowels));
@@ -76,7 +75,7 @@ fprintf('\n Filtered dataset:\n');
 fprintf('  Rows after filtering: %d\n', height(FinalTableTrain));
 fprintf('  Expected rows (words × 5): %d\n\n', length(uniqueWords) * 5);
 %% EXTRACT FEATURES FOR ALL DATA
-fprintf('=== Extracting Features ===\n');
+fprintf(' Extracting Features \n');
 fprintf('This will take several minutes...\n\n');
 
 N = height(FinalTableTrain);
@@ -101,7 +100,7 @@ fprintf('\n✓ Feature extraction complete (%.1f min)\n', totalTime/60);
 [numFeatures, seqLength] = size(X_all{1});
 fprintf('  Feature shape: %d features × %d timesteps\n\n', numFeatures, seqLength);
 %% CREATE WORD-BASED K-FOLD SPLITS (NO DATA LEAKAGE)
-fprintf('=== Creating %d-Fold Word-Based Splits ===\n', K_FOLDS);
+fprintf(' Creating %d-Fold Word-Based Splits \n', K_FOLDS);
 
 uniqueWords = unique(FinalTableTrain.word, 'stable');
 numWords = length(uniqueWords);
@@ -145,7 +144,7 @@ end
 
 fprintf('\n K-Fold splits created (word-based, no leakage)\n\n');
 %% INITIALIZE STORAGE FOR RESULTS
-fprintf('=== Initializing Result Storage ===\n');
+fprintf(' Initializing Result Storage \n');
 
 % Metrics storage
 metrics = struct();
@@ -181,9 +180,7 @@ tlo = tiledlayout(2, 3, 'TileSpacing', 'compact', 'Padding', 'compact');
 title(tlo, 'Confusion Matrices per Fold (Validation Set)', 'FontSize', 14, 'FontWeight', 'bold');
 %%
 %% K-FOLD TRAINING LOOP
-fprintf('========================================\n');
 fprintf('STARTING %d-FOLD CROSS-VALIDATION\n', K_FOLDS);
-fprintf('========================================\n\n');
 
 for fold = 1:K_FOLDS
     fprintf('\n');
@@ -192,7 +189,7 @@ for fold = 1:K_FOLDS
     fprintf('╚══════════════════════════════════════╝\n\n');
     
     %% SPLIT DATA
-    fprintf('--- Splitting Data ---\n');
+    fprintf(' Splitting Data \n');
     
     % Validation indices for this fold
     valIdx = foldIndices{fold};
@@ -220,7 +217,7 @@ for fold = 1:K_FOLDS
     fprintf('  Val   - Absent: %d, Present: %d\n', sum(Yval==0), sum(Yval==1));
     
     %% DATA AUGMENTATION
-    fprintf('\n--- Augmenting Training Data ---\n');
+    fprintf('\n Augmenting Training Data \n');
     
     idx0 = find(Ytrain == 0);
     idx1 = find(Ytrain == 1);
@@ -258,7 +255,7 @@ for fold = 1:K_FOLDS
         sum(YtrainAug_numeric==0), sum(YtrainAug_numeric==1));
     
     %% NORMALIZATION (Standard Scaler using TRAINING data only)
-    fprintf('\n--- Normalizing Features ---\n');
+    fprintf('\n Normalizing Features \n');
     
     allTrainData = horzcat(XtrainAug{:});
     mu = mean(allTrainData, 2);
@@ -281,7 +278,7 @@ for fold = 1:K_FOLDS
     Yval_cat = categorical(Yval, [0, 1], {'Absent', 'Present'});
     
     %% BUILD MODEL
-    fprintf('\n--- Building LSTM Model ---\n');
+    fprintf('\n Building LSTM Model \n');
     
     layers = [
         sequenceInputLayer(numFeatures, 'Name', 'input')
@@ -313,14 +310,14 @@ for fold = 1:K_FOLDS
     fprintf('   Model architecture ready\n');
     
     %% TRAIN
-    fprintf('\n--- Training (Fold %d) ---\n', fold);
+    fprintf('\n Training (Fold %d) \n', fold);
     tic;
     net = trainNetwork(XtrainAug, YtrainAug_cat, layers, options);
     trainTime = toc;
     fprintf('   Training complete (%.1f min)\n', trainTime/60);
     
     %% EVALUATE TRAINING SET
-    fprintf('\n--- Evaluating Training Set ---\n');
+    fprintf('\n Evaluating Training Set \n');
     
     [YPred_train, scores_train] = classify(net, XtrainAug);
     
@@ -352,7 +349,7 @@ for fold = 1:K_FOLDS
     roc_data.train_labels{fold} = YtrainAug_cat;
     
     %% EVALUATE VALIDATION SET
-    fprintf('\n--- Evaluating Validation Set ---\n');
+    fprintf('\n Evaluating Validation Set \n');
     
     [YPred_val, scores_val] = classify(net, Xval);
     
@@ -418,9 +415,7 @@ xlabel(tlo, 'Predicted Class', 'FontSize', 12, 'FontWeight', 'bold');
 ylabel(tlo, 'True Class', 'FontSize', 12, 'FontWeight', 'bold');
 
 %% DISPLAY FOLD-BY-FOLD RESULTS
-fprintf('========================================\n');
 fprintf('FOLD-BY-FOLD RESULTS\n');
-fprintf('========================================\n\n');
 
 fprintf('╔════════════════════════════════════════════════════════════════════════════════════════════════╗\n');
 fprintf('║  Fold  │     TRAINING METRICS      │      VALIDATION METRICS       │\n');
@@ -440,9 +435,9 @@ end
 fprintf('╚════════════════════════════════════════════════════════════════════════════════════════════════╝\n\n');
 
 %% CALCULATE AND DISPLAY MEAN ± STD
-fprintf('========================================\n');
+
 fprintf('AGGREGATED RESULTS (Mean ± Std)\n');
-fprintf('========================================\n\n');
+
 
 fprintf('TRAINING SET:\n');
 fprintf('  Accuracy:    %.2f%% ± %.2f%%\n', mean(metrics.train_acc)*100, std(metrics.train_acc)*100);
@@ -460,24 +455,10 @@ fprintf('  Sensitivity: %.2f%% ± %.2f%%\n', mean(metrics.val_sens)*100, std(met
 fprintf('  Specificity: %.2f%% ± %.2f%%\n', mean(metrics.val_spec)*100, std(metrics.val_spec)*100);
 fprintf('  F1-Score:    %.2f%% ± %.2f%%\n\n', mean(metrics.val_f1)*100, std(metrics.val_f1)*100);
 
-% Model stability assessment
-fprintf('MODEL STABILITY ASSESSMENT:\n');
-val_f1_std = std(metrics.val_f1)*100;
-if val_f1_std < 3.0
-    fprintf('  ✓ EXCELLENT stability (F1 std: %.2f%%)\n', val_f1_std);
-elseif val_f1_std < 5.0
-    fprintf('  ✓ GOOD stability (F1 std: %.2f%%)\n', val_f1_std);
-elseif val_f1_std < 8.0
-    fprintf('  ⚠ MODERATE stability (F1 std: %.2f%%)\n', val_f1_std);
-else
-    fprintf('  ✗ POOR stability (F1 std: %.2f%%) - Consider more data or regularization\n', val_f1_std);
-end
-fprintf('\n');
+
 
 %% AGGREGATED VALIDATION CONFUSION MATRIX
-fprintf('========================================\n');
 fprintf('AGGREGATED VALIDATION CONFUSION MATRIX\n');
-fprintf('========================================\n\n');
 
 TN_total = val_confusion_total(1,1);
 FP_total = val_confusion_total(1,2);
@@ -532,9 +513,7 @@ cm.Title = sprintf('Validation Confusion Matrix\n(Aggregated across %d folds)', 
 
 fprintf(' Confusion matrix visualization created\n\n');
 %% ROC AND AUC CURVES
-fprintf('========================================\n');
 fprintf('ROC CURVES AND AUC\n');
-fprintf('========================================\n\n');
 
 % Aggregate all training data
 all_train_scores = vertcat(roc_data.train_scores{:});
