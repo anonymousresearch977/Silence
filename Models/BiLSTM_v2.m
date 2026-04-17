@@ -51,7 +51,6 @@ fprintf('  Present (1): %d (%.1f%%)\n', sum(Ytest_A==1), 100*sum(Ytest_A==1)/len
 fprintf('  Absent (0):  %d (%.1f%%)\n\n', sum(Ytest_A==0), 100*sum(Ytest_A==0)/length(Ytest_A));
 %% EXTRACT TRAINING FEATURES
 fprintf(' Extracting Training Features \n');
-fprintf('This will take several minutes...\n\n');
 
 N = height(FinalTableTrain);
 Xtrain_cell = cell(N, 1);
@@ -112,7 +111,7 @@ valIdx = shuffleIdx(1:valCount);
 % Calculate the split point (No shuffling)
 %trainCount = floor(numSamples * (1 - valRatio));
 
-% Define indices chronologically
+
 %trainIdx = 1:trainCount;                  % First 80% (0 to T)
 %valIdx   = (trainCount + 1):numSamples;   % Last 20%  (T to End)
 
