@@ -76,7 +76,6 @@ fprintf('  Rows after filtering: %d\n', height(FinalTableTrain));
 fprintf('  Expected rows (words × 5): %d\n\n', length(uniqueWords) * 5);
 %% EXTRACT FEATURES FOR ALL DATA
 fprintf(' Extracting Features \n');
-fprintf('This will take several minutes...\n\n');
 
 N = height(FinalTableTrain);
 X_all = cell(N, 1);
