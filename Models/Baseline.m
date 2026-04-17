@@ -52,7 +52,6 @@ fprintf('  Absent  (0): %d (%.1f%%)\n\n', sum(Ytest_A==0), 100*sum(Ytest_A==0)/l
 %% EXTRACT TRAINING FEATURES
 
 fprintf(' Extracting Training Features \n');
-fprintf('This will take several minutes...\n\n');
 
 N = height(FinalTableTrain);
 Xtrain_cell = cell(N, 1);
