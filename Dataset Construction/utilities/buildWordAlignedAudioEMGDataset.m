@@ -4,7 +4,7 @@ function Dataset = buildWordAlignedAudioEMGDataset( ...
                     emg_data_aligned, time_EMG, sampleRate_emg)
 % BUILDWORDALIGNEDAUDIOEMGDATASET
 
-% Builds a word-wise dataset containing aligned Audio and neuro muscular signal
+% Builds a word-wise dataset containing aligned Audio and SEMG signal
 % segments with time-frequency analyses.
 %
 % INPUTS:
@@ -16,19 +16,13 @@ function Dataset = buildWordAlignedAudioEMGDataset( ...
 %   sampleRate_Audio    - Audio sampling rate (Hz)
 %
 %   emg_data_aligned    - Aligned EMG signal (channels × samples)
-%   time_EMG            - neuro muscular signal time vector (seconds)
-%   sampleRate_emg      - neuro muscular signal sampling rate (Hz)
+%   time_EMG            - sEMG signal time vector (seconds)
+%   sampleRate_emg      - sEMG signal sampling rate (Hz)
 %
 % OUTPUT:
 %   Dataset             - Struct array with word-wise analysis:
 %                         Audio waveform + spectrogram
-%                         neuro muscular signal waveform + spectrogram + FFT + CWT
-%
-% EXAMPLE:
-%   Dataset = buildWordAlignedAudioEMGDataset( ...
-%              words, timeinterval, ...
-%              Audio_data_aligned, time_Audio, FsAudio, ...
-%              neuro muscular signal_data_aligned, time_neuro muscular signal, Fsneuro muscular signal);
+%                         sEMG signal waveform + spectrogram + FFT + CWT
 %
 
 
