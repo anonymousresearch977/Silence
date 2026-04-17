@@ -3,8 +3,7 @@ function plotAudioEMGFromDataset_SeparateFigures(Dataset, wordIdx, channelList)
 %
 % Plots Audio and EMG analyses as SEPARATE figures
 % with frequency-axis limits applied.
-%
-% EMG freq range   : 0–5 Hz
+
 
 
     if wordIdx < 1 || wordIdx > numel(Dataset)
@@ -23,7 +22,7 @@ function plotAudioEMGFromDataset_SeparateFigures(Dataset, wordIdx, channelList)
     title(['Audio Waveform - Word: ', D.word])
     grid on
 
-    % Audio spectrogram (0–800 Hz)
+
     figure('Name',['Audio Spectrogram - ', D.word]);
     imagesc(D.Audio.spectrogram.T, ...
             D.Audio.spectrogram.F, ...
