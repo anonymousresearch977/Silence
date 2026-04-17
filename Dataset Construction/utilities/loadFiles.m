@@ -1,6 +1,4 @@
 function [numChannels, data, time, sampleRate, unpackedFile, fileList, timestamp] = loadFiles(folderPath)
-% loadFiles
-%   Loads and unpacks .bin files from a folder using fn_BionodeBinOpen_1.
 %
 % Inputs:
 %   folderPath - Path to the folder containing .bin files
