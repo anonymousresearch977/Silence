@@ -1,4 +1,4 @@
-%% processing.mlx
+%% processing.m
 
 % Description:
 % Two sEMG signal channels are processed using a high-pass filter to remove baseline noise, while the audio signal is kept unfiltered to preserve its original characteristics.
@@ -61,8 +61,8 @@ plot(time_EMG(1,:), emg_data_aligned(1,:))
 title('Aligned EMG')
 xlabel('Time (s)')
 %%
-numSamples = size(emg_data_aligned, 2);   % samples from neuro muscular signalS data
-sampleIdx  = 1:numSamples;               % sample indices
+numSamples = size(emg_data_aligned, 2);   
+sampleIdx  = 1:numSamples;               
 
 figure
 plot(time_EMG(1, :), sampleIdx)
@@ -128,7 +128,4 @@ timeinterval = [ ...
 Dataset = buildWordAlignedAudioEMGDataset( words, timeinterval, Audio_data_aligned, time_Audio, sampleRate_Audio, emg_data_aligned, time_EMG, sampleRate_emg)% building the struct containing all needed analysis
 %%
 fieldnames(Dataset)
-%%
-plotAudioEMGFromDataset_SeparateFigures(Dataset, 1, [1 2])% visualizing the spectrogram, CWT, FFT, wave form of audio and neuro muscular signal for both channel for specific word , second input variable is word indices in word array Eg : here its see
-%%
 save('4_04.mat', 'Dataset', '-v7.3'); % save as .mat files
