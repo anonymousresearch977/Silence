@@ -22,8 +22,8 @@ function [filteredSignal] = FilteredSignals(fileList, data, numChannels, sampleR
         % Normalized cutoff for Nyquist frequency
         Wn = [low_cutoff ] / (fs/2);
 
-        % Design 2nd-order Butterworth band-pass filter
-        [b, a] = butter(2, Wn, 'low');
+        % Design 2nd-order Butterworth high-pass filter
+        [b, a] = butter(2, Wn, 'high');
 
         for ch = 1:numChannels{file}
             % Apply zero-phase filtering
