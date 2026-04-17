@@ -16,7 +16,7 @@ The dataset is organized as follows:
 - **Test Data**: `testv2.mat` contains sEMG signals and labels for 
   evaluation on unseen words.
 
-You can find the dataset here: [Dataset Link](https://drive.google.com/drive/folders/1DaCeynK8Co8iiimjvXe_yVnboF0PJD75?usp=drive_link)
+The dataset will be made available to reviewers upon request.
 
 The training and test sets have no overlapping words to ensure 
 robust open-vocabulary evaluation.
