@@ -6,7 +6,7 @@ function plotSignals_Windowed(fileList, time, data, numCh, windowLength)
 %   fixed-length scrollable time window with an interactive slider.
 %
 % Inputs:
-%   fileList     - Structure array containing file information (e.g., names)
+%   fileList     - Structure array containing file information 
 %   time         - Cell array of time vectors corresponding to each file
 %   data         - Cell array containing signal data for each file
 %                  (channels × samples)
